@@ -1,0 +1,17 @@
+<!doctype html>
+<html>
+<head>
+<title>test hylar</title>
+<script src="hylar-client.js"></script>
+<script src="main.js"></script>
+</head>
+<body>
+<textarea width="80%" height="80%" id="texte"></textarea>
+<button onclick="classify()">Classify</button>
+<textarea width="80%" height="80%" id="sparql">
+	SELECT * { ?s ?p ?o } LIMIT 100
+</textarea>
+<button onclick="query()">Query</button>
+<div id="results"></div>
+</body>
+</html>
