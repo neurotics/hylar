@@ -1,23 +1,22 @@
 var hylarWorker = new Worker("worker.js");
 
+// Worker messages handler
 hylarWorker.onmessage = function(event) {
 	if (event.data.action === "stream") {
+		// On incomplete results... (returns turtle-ized triples)
 		appendResult(event.data.partial.toString());
 	} else if (event.data.action === "classify") {
+		// On successful classification... (returns true)
+		appendResult(JSON.stringify(event.data));
 		console.log("Classif finie");
 	} else if (event.data.action === "query") {
+		// On successful query answering... (returns SPARQL query results)
+		appendResult(JSON.stringify(event.data));
 		console.log(event.data);
 	}
 };
 
-function clear() {
-	document.getElementById("results").innerHTML = "";
-};
-
-function appendResult(result) {
-	document.getElementById("results").innerHTML += (result.replace(/</g, '&lt;').replace(/>/g, '&gt;') + "<br/>");
-};
-
+// Executes the JSON-LD ontology classification onto the HyLAR worker
 function classify() {
 	clear();
 	hylarWorker.postMessage({
@@ -28,10 +27,19 @@ function classify() {
 	})
 };
 
+// Launches a SPARQL query onto the HyLAR worker
 function query() {
 	clear();
 	hylarWorker.postMessage({
 		action: "query",
 		query: document.getElementById("sparql").value
 	})
+};
+
+// View update functions
+function clear() {
+	document.getElementById("results").innerHTML = "";
+};
+function appendResult(result) {
+	document.getElementById("results").innerHTML += (result.replace(/</g, '&lt;').replace(/>/g, '&gt;') + "<br/>");
 };
